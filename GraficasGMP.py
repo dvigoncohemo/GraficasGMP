@@ -149,7 +149,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
                         len( Potencia ), endpoint = True ), 
                         TEMP_MKE, 'crimson', label = 'Temperatura' )
 
-            plt.ylabel( 'Temperatura °C' )
+            plt.ylabel( 'Temperatura (°C)' )
             lns = T + P
             labs = [ l.get_label() for l in lns ]
 
