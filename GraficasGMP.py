@@ -1,4 +1,4 @@
-# Librerías importadas por David Vigón
+# Librerías importadas por David Vigón Sánchez
 from interfaz import *
 from PyQt5.QtWidgets import QFileDialog, QComboBox
 from PyQt5 import QtGui
