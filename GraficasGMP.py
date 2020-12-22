@@ -136,9 +136,9 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             P = ax0.plot( np.linspace( 0, len( Potencia ), 
                         len( Potencia ), endpoint = True ), 
-                        Potencia, 'tab:cyan', label = 'Potencia real' )
+                        Potencia, 'tab:cyan', label = 'Potencia' )
 
-            plt.xlabel( 'Número de muestreo' )
+            plt.xlabel( 'Número de muestra' )
             plt.ylabel('Potencia (kW)')
             plt.grid( True )
 
@@ -242,30 +242,32 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             Kic_down_graf= plt.figure( figsize = ( 15, 10 ) )  
 
-            plt.subplot( 3, 1, 1 )
+            ax=plt.subplot( 3, 1, 1 )
 
-            plt.plot( np.linspace( 0, len( Potencia ), 
-                      len( Potencia ), endpoint = True ), 
-                      Par, 'tab:cyan', label= 'Par motor' )
-            
-            plt.ylabel( 'Par Nm' )
-            plt.xlabel( 'Número de muestreo' )
-            plt.legend( loc = 'best' )
-            plt.grid( True )
+            P=ax.plot(np.linspace(0, len(Potencia), len(Potencia), endpoint=True), Potencia,'tab:cyan', label='Potencia')
+            plt.ylabel('Potencia (kW)')
+            plt.xlabel('Número de muestra')
+            ax1 = ax.twinx()
 
-            Kic_down_graf.suptitle( 'Conexión Kick-Down', fontsize = 16 )
+            T=ax1.plot(np.linspace(0, len(Par), len(Par), endpoint=True), Par,'crimson', label='Par')
+            lns = T+P
+            labs = [l.get_label() for l in lns]
+            ax1.legend(lns, labs,bbox_to_anchor=(1,0.6,0,0.2),loc='upper right')
+            plt.ylabel('Par (N·m)')            
+            plt.grid(True)
+            Kic_down_graf.suptitle('Conexión Kick-Down', y=0.99, fontsize=16)
 
             plt.subplot( 3, 1, 2 )
 
             plt.plot( np.linspace( 0, len( KICK_DOWN1 ), 
                       len( KICK_DOWN1 ), endpoint = True ), 
-                      KICK_DOWN1, 'orange', label = 'KICK_DOWN1 1' )
+                      KICK_DOWN1, 'orange', label = 'Kick-Down 1' )
 
             plt.plot( Kick_down1_puntos[ 0 : i3, 1 ], y3 + 1, 'go',
-                      label = 'Conexión/Desconexión' )
+                      label = 'Conexión' )
             
             plt.ylabel( 'Estado del Kick-Down 1' )
-            plt.xlabel( 'Número de muestreo' )
+            plt.xlabel( 'Número de muestra' )
             plt.legend( loc = 'best' )
             plt.grid( True )
 
@@ -273,31 +275,31 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             plt.plot( np.linspace( 0, len( KICK_DOWN2 ), 
                       len( KICK_DOWN2 ), endpoint = True ), 
-                      KICK_DOWN2, 'b', label = 'KICK_DOWN2' )
+                      KICK_DOWN2, 'b', label = 'Kick-Down 2' )
 
             plt.plot( Kick_down2_puntos[ 0 : i4, 1 ], y4 + 1, 'go', 
-                      label='Conexión/Desconexión' )
+                      label='Conexión' )
             
-            plt.ylabel( 'Estado kick-down 2' )
-            plt.xlabel( 'Número de muestreo' )
+            plt.ylabel( 'Estado del Kick-Down 2' )
+            plt.xlabel( 'Número de muestra' )
             plt.legend( loc = 'best' )
             plt.grid( True )
 
-            columnas=( 'Par (Nm)', 'Potencia real (kW)' )
+            columnas=( 'Par (N·m)', 'Potencia (kW)' )
             filas=( 'Kick-Down 1', 'Kick-Down 2' )
             
             cellText = [ [ int( Kick_down1_puntos[ 0, 0 ] ), int( Potencia[ Kick_down1_puntos[ 0, 1 ] ] )], [ int( Kick_down2_puntos[ 0, 0 ] ), int( Potencia[ Kick_down2_puntos[ 0, 1 ] ] ) ] ]
-            tabla = plt.table( cellText = cellText, rowLoc = 'right',
-                            rowLabels = filas,
-                            colWidths = [ .5, .5 ], colLabels = columnas,
-                            colLoc = 'center', loc = 'bottom', zorder = 20 )
+            tabla = plt.table(cellText=cellText, rowLoc='right',
+                  rowLabels=filas,
+                  colWidths=[.5,.5], colLabels=columnas,
+                   colLoc='center', loc='bottom',bbox=[0,-0.8,1,0.5],zorder=20)
 
             tabla.auto_set_font_size( True )
             tabla.scale( 1, 1 )
             plt.grid( True )
             #ax0.set_title( 'Conexión/Desconexión de ventiladores', fontsize = 16 )
 
-            #plt.tight_layout()
+            plt.tight_layout()
             ruta = self.carpeta_destino + '/' + 'Kick_down_graf.png'
             plt.savefig( ruta, dpi = self.calidad )
             plt.close( Kic_down_graf )
