@@ -352,15 +352,15 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax2 = ax1.twinx()
 
             T=ax2.plot(Potencia_puntos[:i5,2], TEMP_MKE[Potencia_puntos[:i5,1]],'b', label='Temperatura MKE')
-            plt.ylabel('Temperatura °C')
+            plt.ylabel('Temperatura (°C)')
             lns = T+P
             labs = [l.get_label() for l in lns]
             Perdida_potencia.suptitle('Rampa pérdida de potenica', fontsize=16)
             Perdida_potencia.legend(lns, labs,bbox_to_anchor=(0.3,0.6,0,0.2),loc='center left')
             ax2.yaxis.grid() # horizontal lines
             ax2.xaxis.grid() # vertical lines 
-            columnas=('Potencia (kW)','Temperatura MKE °C')
-            filas=('Máximo valor','Ventilador mínimo valor')
+            columnas=('Potencia (kW)','Temperatura MKE (°C)')
+            filas=('Máximo valor','Mínimo valor')
             n_filas=2
             y_offset = np.zeros(len(columnas))
             cellText = [[round(Max_perdida[0,0],2),round(Temp_max_perdida,1)],[round(Min_perdida[0,0],2),round(Temp_min_perdida,1)]]
@@ -402,7 +402,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             plt.plot(Revoluciones[Desconexion_1200[0:i6]],'tab:cyan', label='RPM motor')
             plt.legend(loc='best')
             plt.ylabel('Revoluciones/minuto')
-            plt.xlabel('Número de muestreo')
+            plt.xlabel('Número de muestra')
             plt.grid(True)
 
             plt.subplot(312)
@@ -411,15 +411,15 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             plt.grid(True)
             plt.legend(loc='best')
-            plt.ylabel('Estado Ventiladores')
-            plt.xlabel('Número de muestreo')
+            plt.ylabel('Estado ventiladores')
+            plt.xlabel('Número de muestra')
 
             plt.subplot(313)
-            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'r', label='KICK_DOWN1')
-            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'b--', label='KICK_DOWN2')
+            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'r', label='Kick-Down 1')
+            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'b--', label='Kick-Down 2')
             plt.legend(loc='best')
-            plt.ylabel('Estado kick-down')
-            plt.xlabel('Número de muestreo')
+            plt.ylabel('Estado Kick-Down')
+            plt.xlabel('Número de muestra')
 
             plt.grid(True)
             Des_1200_graf.suptitle('Desconexión 1200 rpm', fontsize=16)
@@ -455,7 +455,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax0.plot(Revoluciones[Desconexion_1400[0:i7]],'tab:cyan', label='RPM motor')
             ax0.legend(loc='best')
             ax0.set_ylabel('Revoluciones/minuto')
-            ax0.set_xlabel('Número de muestreo')
+            ax0.set_xlabel('Número de muestra')
             plt.grid(True)
 
             ax1=plt.subplot(312)
@@ -467,14 +467,14 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax1.legend(loc='lower right')
             ax1.set_ylabel('Estado ventiladores')
 
-            ax1.set_xlabel('Número de muestreo')
+            ax1.set_xlabel('Número de muestra')
 
             ax2=plt.subplot(313)
-            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'r', label='KICK_DOWN1')
-            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'b--', label='KICK_DOWN2')
+            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'r', label='Kick-Down 1')
+            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'b--', label='Kick Down 2')
             ax2.legend(loc='best')
-            ax2.set_ylabel('Estado kick-down')
-            ax2.set_xlabel('Número de muestreo')
+            ax2.set_ylabel('Estado Kick-Down')
+            ax2.set_xlabel('Número de muestra')
 
 
             plt.grid(True)
@@ -527,13 +527,13 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             # Second, show the right spine.
             par2.spines["right"].set_visible(True)
 
-            p1, = host.plot(np.linspace(0, i8*5, i8),Potencia[Regulador[0:i8]],'r--', label='Potencia real')
+            p1, = host.plot(np.linspace(0, i8*5, i8),Potencia[Regulador[0:i8]],'r--', label='Potencia')
             p2, = par1.plot(np.linspace(0, i8*5, i8),Par[Regulador[0:i8]],'b--', label='Par')
             p3, = par2.plot(np.linspace(0, i8*5, i8),Revoluciones[Regulador[0:i8]],'g', label='Revoluciones')
 
             host.set_xlabel("Tiempo (s)")
             host.set_ylabel("Potencia (kW)")
-            par1.set_ylabel("Par (Nm)")
+            par1.set_ylabel("Par (N·m)")
             par2.set_ylabel("Revoluciones (rpm)")
 
             tkw = dict(size=4, width=1.5)
@@ -544,6 +544,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             lines = [p1, p2, p3]
 
             host.legend(lines, [l.get_label() for l in lines],loc='center right')
+            plt.title('Regulador 2680 rpm',fontsize=16)
             ruta = self.carpeta_destino + '/' + 'Regulador_2680.png'
             plt.savefig( ruta, dpi = self.calidad )
             
