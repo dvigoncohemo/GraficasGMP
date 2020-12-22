@@ -139,8 +139,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
                         Potencia, 'tab:cyan', label = 'Potencia real' )
 
             plt.xlabel( 'Número de muestreo' )
-            plt.ylabel( 'Potencia kW' )
-            plt.legend( loc = 'best' )
+            plt.ylabel('Potencia (kW)')
             plt.grid( True )
 
             ax1 = ax0.twinx( )
@@ -149,9 +148,11 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
                         len( Potencia ), endpoint = True ), 
                         TEMP_MKE, 'crimson', label = 'Temperatura' )
 
-            plt.ylabel( 'Temperatura (°C)' )
+            plt.ylabel('Temperatura (°C)')
+
             lns = T + P
             labs = [ l.get_label() for l in lns ]
+            ax1.legend(lns, labs,bbox_to_anchor=(1,0.6,0,0.2),loc='upper right')
 
 
             plt.subplot( 3, 1, 2 )
