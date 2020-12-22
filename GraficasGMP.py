@@ -1,10 +1,10 @@
-# Librerías importadas por David
+# Librerías importadas por David Vigón Sánchez
 from interfaz import *
 from PyQt5.QtWidgets import QFileDialog, QComboBox
 from PyQt5 import QtGui
 import os
 
-# Librerías importadas por Joan
+# Librerías importadas por Joan Requena
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -28,8 +28,8 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
         self.pushButton_cambiar.clicked.connect(self.funcion_Modificar)
         self.pushButton_generar_grafica.clicked.connect(self.funcion_Generar_Grafica)
 
-        self.pushButton_generar_grafica.setStyleSheet("background-color: gray")
         self.pushButton_generar_grafica.setEnabled(False)
+        self.pushButton_generar_grafica.setStyleSheet("background-color: rgb(204, 204, 204); color: rgb(135, 135, 163);")
 
     # Modifica la ruta de entrada del fichero y lo carga en una variable
     def funcion_Abrir( self ):
@@ -149,6 +149,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
                         TEMP_MKE, 'crimson', label = 'Temperatura' )
 
             plt.ylabel('Temperatura (°C)')
+
             lns = T + P
             labs = [ l.get_label() for l in lns ]
             ax1.legend(lns, labs,bbox_to_anchor=(1,0.6,0,0.2),loc='upper right')
