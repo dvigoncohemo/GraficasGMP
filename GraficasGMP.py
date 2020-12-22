@@ -343,8 +343,8 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             #%%
             'Perdida potencia-temperatura'
             Perdida_potencia ,ax1= plt.subplots(figsize=(15,10))
-            P=ax1.plot(Potencia_puntos[:i5,2], Potencia_puntos[:i5,0],'orange', label='Potencia real')
-            plt.ylabel('Potencia(kW)')
+            P=ax1.plot(Potencia_puntos[:i5,2], Potencia_puntos[:i5,0],'orange', label='Potencia')
+            plt.ylabel('Potencia (kW)')
             plt.xlabel('Número de muestra')
             plt.plot(Max_perdida[0,1],Max_perdida[0,0],'go',label='Máximo')
             plt.plot(Min_perdida[0,1],Min_perdida[0,0],'ro',label='Mínimo')
@@ -352,27 +352,28 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax2 = ax1.twinx()
 
             T=ax2.plot(Potencia_puntos[:i5,2], TEMP_MKE[Potencia_puntos[:i5,1]],'b', label='Temperatura MKE')
-            plt.ylabel('Temperatura ºC')
+            plt.ylabel('Temperatura °C')
             lns = T+P
             labs = [l.get_label() for l in lns]
             Perdida_potencia.suptitle('Rampa pérdida de potenica', fontsize=16)
-            Perdida_potencia.legend(lns, labs,loc='right', bbox_to_anchor=(0.25,0.5))
-            ax1.yaxis.grid() # horizontal lines
-            ax1.xaxis.grid() # vertical lines 
-            columnas=('Potencia kW','Temperatura MKE ºC')
-            filas=('Máximo valor','VenMínimo valor')
+            Perdida_potencia.legend(lns, labs,bbox_to_anchor=(0.3,0.6,0,0.2),loc='center left')
+            ax2.yaxis.grid() # horizontal lines
+            ax2.xaxis.grid() # vertical lines 
+            columnas=('Potencia (kW)','Temperatura MKE °C')
+            filas=('Máximo valor','Ventilador mínimo valor')
             n_filas=2
             y_offset = np.zeros(len(columnas))
             cellText = [[round(Max_perdida[0,0],2),round(Temp_max_perdida,1)],[round(Min_perdida[0,0],2),round(Temp_min_perdida,1)]]
             tabla = plt.table(cellText=cellText, rowLoc='right',
-                            rowLabels=filas,
-                            colWidths=[.5,.5], colLabels=columnas,
-                            colLoc='center', loc='bottom',zorder=20)
+                 rowLabels=filas,
+                 colWidths=[.5,.5], colLabels=columnas,
+                 colLoc='center', loc='bottom',bbox=[0,-0.6,1,0.4],zorder=20)
 
             tabla.auto_set_font_size(True)
             tabla.scale(1,1)
             Perdida_potencia.suptitle('Pérdida de potencia', fontsize=16)
-            
+            plt.tight_layout()
+
             ruta = self.carpeta_destino + '/' + 'Perdida_Potencia.png'
             plt.savefig( ruta, dpi = self.calidad )
             plt.close(Perdida_potencia)
