@@ -1,10 +1,10 @@
-# Librerías importadas por David
+# Librerías importadas por David Vigón Sánchez
 from interfaz import *
 from PyQt5.QtWidgets import QFileDialog, QComboBox
 from PyQt5 import QtGui
 import os
 
-# Librerías importadas por Joan
+# Librerías importadas por Joan Requena
 import pandas as pd 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -136,11 +136,10 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             P = ax0.plot( np.linspace( 0, len( Potencia ), 
                         len( Potencia ), endpoint = True ), 
-                        Potencia, 'tab:cyan', label = 'Potencia real' )
+                        Potencia, 'tab:cyan', label = 'Potencia' )
 
-            plt.xlabel( 'Número de muestreo' )
-            plt.ylabel( 'Potencia kW' )
-            plt.legend( loc = 'best' )
+            plt.xlabel( 'Número de muestra' )
+            plt.ylabel('Potencia (kW)')
             plt.grid( True )
 
             ax1 = ax0.twinx( )
@@ -149,9 +148,11 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
                         len( Potencia ), endpoint = True ), 
                         TEMP_MKE, 'crimson', label = 'Temperatura' )
 
-            plt.ylabel( 'Temperatura °C' )
+            plt.ylabel('Temperatura (°C)')
+
             lns = T + P
             labs = [ l.get_label() for l in lns ]
+            ax1.legend(lns, labs,bbox_to_anchor=(1,0.6,0,0.2),loc='upper right')
 
 
             plt.subplot( 3, 1, 2 )
@@ -241,30 +242,32 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             Kic_down_graf= plt.figure( figsize = ( 15, 10 ) )  
 
-            plt.subplot( 3, 1, 1 )
+            ax=plt.subplot( 3, 1, 1 )
 
-            plt.plot( np.linspace( 0, len( Potencia ), 
-                      len( Potencia ), endpoint = True ), 
-                      Par, 'tab:cyan', label= 'Par motor' )
-            
-            plt.ylabel( 'Par Nm' )
-            plt.xlabel( 'Número de muestreo' )
-            plt.legend( loc = 'best' )
-            plt.grid( True )
+            P=ax.plot(np.linspace(0, len(Potencia), len(Potencia), endpoint=True), Potencia,'tab:cyan', label='Potencia')
+            plt.ylabel('Potencia (kW)')
+            plt.xlabel('Número de muestra')
+            ax1 = ax.twinx()
 
-            Kic_down_graf.suptitle( 'Conexión Kick-Down', fontsize = 16 )
+            T=ax1.plot(np.linspace(0, len(Par), len(Par), endpoint=True), Par,'crimson', label='Par')
+            lns = T+P
+            labs = [l.get_label() for l in lns]
+            ax1.legend(lns, labs,bbox_to_anchor=(1,0.6,0,0.2),loc='upper right')
+            plt.ylabel('Par (N·m)')            
+            plt.grid(True)
+            Kic_down_graf.suptitle('Conexión Kick-Down', y=0.99, fontsize=16)
 
             plt.subplot( 3, 1, 2 )
 
             plt.plot( np.linspace( 0, len( KICK_DOWN1 ), 
                       len( KICK_DOWN1 ), endpoint = True ), 
-                      KICK_DOWN1, 'orange', label = 'KICK_DOWN1 1' )
+                      KICK_DOWN1, 'orange', label = 'Kick-Down 1' )
 
             plt.plot( Kick_down1_puntos[ 0 : i3, 1 ], y3 + 1, 'go',
-                      label = 'Conexión/Desconexión' )
+                      label = 'Conexión' )
             
             plt.ylabel( 'Estado del Kick-Down 1' )
-            plt.xlabel( 'Número de muestreo' )
+            plt.xlabel( 'Número de muestra' )
             plt.legend( loc = 'best' )
             plt.grid( True )
 
@@ -272,31 +275,31 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             plt.plot( np.linspace( 0, len( KICK_DOWN2 ), 
                       len( KICK_DOWN2 ), endpoint = True ), 
-                      KICK_DOWN2, 'b', label = 'KICK_DOWN2' )
+                      KICK_DOWN2, 'b', label = 'Kick-Down 2' )
 
             plt.plot( Kick_down2_puntos[ 0 : i4, 1 ], y4 + 1, 'go', 
-                      label='Conexión/Desconexión' )
+                      label='Conexión' )
             
-            plt.ylabel( 'Estado kick-down 2' )
-            plt.xlabel( 'Número de muestreo' )
+            plt.ylabel( 'Estado del Kick-Down 2' )
+            plt.xlabel( 'Número de muestra' )
             plt.legend( loc = 'best' )
             plt.grid( True )
 
-            columnas=( 'Par (Nm)', 'Potencia real (kW)' )
+            columnas=( 'Par (N·m)', 'Potencia (kW)' )
             filas=( 'Kick-Down 1', 'Kick-Down 2' )
             
             cellText = [ [ int( Kick_down1_puntos[ 0, 0 ] ), int( Potencia[ Kick_down1_puntos[ 0, 1 ] ] )], [ int( Kick_down2_puntos[ 0, 0 ] ), int( Potencia[ Kick_down2_puntos[ 0, 1 ] ] ) ] ]
-            tabla = plt.table( cellText = cellText, rowLoc = 'right',
-                            rowLabels = filas,
-                            colWidths = [ .5, .5 ], colLabels = columnas,
-                            colLoc = 'center', loc = 'bottom', zorder = 20 )
+            tabla = plt.table(cellText=cellText, rowLoc='right',
+                  rowLabels=filas,
+                  colWidths=[.5,.5], colLabels=columnas,
+                   colLoc='center', loc='bottom',bbox=[0,-0.8,1,0.5],zorder=20)
 
             tabla.auto_set_font_size( True )
             tabla.scale( 1, 1 )
             plt.grid( True )
             #ax0.set_title( 'Conexión/Desconexión de ventiladores', fontsize = 16 )
 
-            #plt.tight_layout()
+            plt.tight_layout()
             ruta = self.carpeta_destino + '/' + 'Kick_down_graf.png'
             plt.savefig( ruta, dpi = self.calidad )
             plt.close( Kic_down_graf )
@@ -340,8 +343,8 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             #%%
             'Perdida potencia-temperatura'
             Perdida_potencia ,ax1= plt.subplots(figsize=(15,10))
-            P=ax1.plot(Potencia_puntos[:i5,2], Potencia_puntos[:i5,0],'orange', label='Potencia real')
-            plt.ylabel('Potencia(kW)')
+            P=ax1.plot(Potencia_puntos[:i5,2], Potencia_puntos[:i5,0],'orange', label='Potencia')
+            plt.ylabel('Potencia (kW)')
             plt.xlabel('Número de muestra')
             plt.plot(Max_perdida[0,1],Max_perdida[0,0],'go',label='Máximo')
             plt.plot(Min_perdida[0,1],Min_perdida[0,0],'ro',label='Mínimo')
@@ -349,27 +352,28 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax2 = ax1.twinx()
 
             T=ax2.plot(Potencia_puntos[:i5,2], TEMP_MKE[Potencia_puntos[:i5,1]],'b', label='Temperatura MKE')
-            plt.ylabel('Temperatura ºC')
+            plt.ylabel('Temperatura (°C)')
             lns = T+P
             labs = [l.get_label() for l in lns]
             Perdida_potencia.suptitle('Rampa pérdida de potenica', fontsize=16)
-            Perdida_potencia.legend(lns, labs,loc='right', bbox_to_anchor=(0.25,0.5))
-            ax1.yaxis.grid() # horizontal lines
-            ax1.xaxis.grid() # vertical lines 
-            columnas=('Potencia kW','Temperatura MKE ºC')
-            filas=('Máximo valor','VenMínimo valor')
+            Perdida_potencia.legend(lns, labs,bbox_to_anchor=(0.3,0.6,0,0.2),loc='center left')
+            ax2.yaxis.grid() # horizontal lines
+            ax2.xaxis.grid() # vertical lines 
+            columnas=('Potencia (kW)','Temperatura MKE (°C)')
+            filas=('Máximo valor','Mínimo valor')
             n_filas=2
             y_offset = np.zeros(len(columnas))
             cellText = [[round(Max_perdida[0,0],2),round(Temp_max_perdida,1)],[round(Min_perdida[0,0],2),round(Temp_min_perdida,1)]]
             tabla = plt.table(cellText=cellText, rowLoc='right',
-                            rowLabels=filas,
-                            colWidths=[.5,.5], colLabels=columnas,
-                            colLoc='center', loc='bottom',zorder=20)
+                 rowLabels=filas,
+                 colWidths=[.5,.5], colLabels=columnas,
+                 colLoc='center', loc='bottom',bbox=[0,-0.6,1,0.4],zorder=20)
 
             tabla.auto_set_font_size(True)
             tabla.scale(1,1)
             Perdida_potencia.suptitle('Pérdida de potencia', fontsize=16)
-            
+            plt.tight_layout()
+
             ruta = self.carpeta_destino + '/' + 'Perdida_Potencia.png'
             plt.savefig( ruta, dpi = self.calidad )
             plt.close(Perdida_potencia)
@@ -398,7 +402,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             plt.plot(Revoluciones[Desconexion_1200[0:i6]],'tab:cyan', label='RPM motor')
             plt.legend(loc='best')
             plt.ylabel('Revoluciones/minuto')
-            plt.xlabel('Número de muestreo')
+            plt.xlabel('Número de muestra')
             plt.grid(True)
 
             plt.subplot(312)
@@ -407,15 +411,15 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
 
             plt.grid(True)
             plt.legend(loc='best')
-            plt.ylabel('Estado Ventiladores')
-            plt.xlabel('Número de muestreo')
+            plt.ylabel('Estado ventiladores')
+            plt.xlabel('Número de muestra')
 
             plt.subplot(313)
-            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'r', label='KICK_DOWN1')
-            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'b--', label='KICK_DOWN2')
+            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'r', label='Kick-Down 1')
+            plt.plot(KICK_DOWN1[Desconexion_1200[0:i6]],'b--', label='Kick-Down 2')
             plt.legend(loc='best')
-            plt.ylabel('Estado kick-down')
-            plt.xlabel('Número de muestreo')
+            plt.ylabel('Estado Kick-Down')
+            plt.xlabel('Número de muestra')
 
             plt.grid(True)
             Des_1200_graf.suptitle('Desconexión 1200 rpm', fontsize=16)
@@ -451,7 +455,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax0.plot(Revoluciones[Desconexion_1400[0:i7]],'tab:cyan', label='RPM motor')
             ax0.legend(loc='best')
             ax0.set_ylabel('Revoluciones/minuto')
-            ax0.set_xlabel('Número de muestreo')
+            ax0.set_xlabel('Número de muestra')
             plt.grid(True)
 
             ax1=plt.subplot(312)
@@ -463,14 +467,14 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             ax1.legend(loc='lower right')
             ax1.set_ylabel('Estado ventiladores')
 
-            ax1.set_xlabel('Número de muestreo')
+            ax1.set_xlabel('Número de muestra')
 
             ax2=plt.subplot(313)
-            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'r', label='KICK_DOWN1')
-            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'b--', label='KICK_DOWN2')
+            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'r', label='Kick-Down 1')
+            ax2.plot(KICK_DOWN1[Desconexion_1400[0:i7]],'b--', label='Kick Down 2')
             ax2.legend(loc='best')
-            ax2.set_ylabel('Estado kick-down')
-            ax2.set_xlabel('Número de muestreo')
+            ax2.set_ylabel('Estado Kick-Down')
+            ax2.set_xlabel('Número de muestra')
 
 
             plt.grid(True)
@@ -523,13 +527,13 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             # Second, show the right spine.
             par2.spines["right"].set_visible(True)
 
-            p1, = host.plot(np.linspace(0, i8*5, i8),Potencia[Regulador[0:i8]],'r--', label='Potencia real')
+            p1, = host.plot(np.linspace(0, i8*5, i8),Potencia[Regulador[0:i8]],'r--', label='Potencia')
             p2, = par1.plot(np.linspace(0, i8*5, i8),Par[Regulador[0:i8]],'b--', label='Par')
             p3, = par2.plot(np.linspace(0, i8*5, i8),Revoluciones[Regulador[0:i8]],'g', label='Revoluciones')
 
             host.set_xlabel("Tiempo (s)")
             host.set_ylabel("Potencia (kW)")
-            par1.set_ylabel("Par (Nm)")
+            par1.set_ylabel("Par (N·m)")
             par2.set_ylabel("Revoluciones (rpm)")
 
             tkw = dict(size=4, width=1.5)
@@ -540,6 +544,7 @@ class MainWindow( QtWidgets.QMainWindow, Ui_MainWindow ):
             lines = [p1, p2, p3]
 
             host.legend(lines, [l.get_label() for l in lines],loc='center right')
+            plt.title('Regulador 2680 rpm',fontsize=16)
             ruta = self.carpeta_destino + '/' + 'Regulador_2680.png'
             plt.savefig( ruta, dpi = self.calidad )
             
